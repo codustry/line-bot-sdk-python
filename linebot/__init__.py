@@ -32,4 +32,5 @@ from .webhook import (  # noqa
     WebhookParser,
     WebhookHandler,
     WebhookPayload,
+    WebhookHandlerV2,
 )
