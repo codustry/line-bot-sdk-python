@@ -350,3 +350,23 @@ class WebhookHandlerV2(WebhookHandler):
 
         if inspect.iscoroutine(function_return):
             await function_return
+
+    def __add_handler(self, func, event, message=None):
+        key = self.__get_handler_key(event, message=message)
+        self._handlers[key] = func
+
+    @staticmethod
+    def __get_args_count(func):
+        if PY3:
+            arg_spec = inspect.getfullargspec(func)
+            return (arg_spec.varargs is not None, len(arg_spec.args))
+        else:
+            arg_spec = inspect.getargspec(func)
+            return (arg_spec.varargs is not None, len(arg_spec.args))
+
+    @staticmethod
+    def __get_handler_key(event, message=None):
+        if message is None:
+            return event.__name__
+        else:
+            return event.__name__ + '_' + message.__name__
